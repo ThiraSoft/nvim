@@ -43,6 +43,7 @@ require("nvim-tree").setup {
   view = {
     width = NvimTreeWidth(), -- Définit la largeur de NvimTree à 25% de la largeur de l'écran
     side = "left", -- Positionne NvimTree à gauche (tu peux aussi mettre "right")
+    signcolumn = "no",
   },
   actions = {
     open_file = {
