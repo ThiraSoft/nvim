@@ -6,21 +6,14 @@
 local M = {}
 
 M.base46 = {
-  theme = "rosepine",
-  transparency = true,
+  theme = "custom",
+  transparency = false,
 
   -- hl_override = {
   -- 	Comment = { italic = true },
   -- 	["@comment"] = { italic = true },
   -- },
 }
-
--- vim.api.nvim_create_autocmd("BufWritePre", {
---   pattern = ".go",
---   callback = function()
---     vim.lsp.buf.format { async = false }
---   end,
--- })
 
 vim.cmd "highlight St_relativepath guifg=#626a83 guibg=#2a2b36"
 
@@ -31,7 +24,8 @@ end
 M.ui = {
   statusline = {
     theme = "default",
-    order = { "mode", "relativepath", "file", "git", "%=", "lsp_msg", "%=", "diagnostics", "lsp", "cwd", "cursor" },
+    order = { "mode", "relativepath", "file", "git", "%=", "lsp_msg", "%=", "diagnostics", "lsp", "cwd" },
+    -- order = { "mode", "relativepath", "file", "git", "%=", "lsp_msg", "%=", "diagnostics", "lsp", "cwd", "cursor" },
     modules = {
       relativepath = function()
         local path = vim.api.nvim_buf_get_name(stbufnr())
@@ -45,5 +39,4 @@ M.ui = {
     },
   },
 }
-
 return M

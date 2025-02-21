@@ -3,14 +3,11 @@ vim.g.mapleader = " "
 
 -- bootstrap lazy and all plugins
 local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
-
 if not vim.uv.fs_stat(lazypath) then
   local repo = "https://github.com/folke/lazy.nvim.git"
   vim.fn.system { "git", "clone", "--filter=blob:none", repo, "--branch=stable", lazypath }
 end
-
 vim.opt.rtp:prepend(lazypath)
-
 local lazy_config = require "configs.lazy"
 
 -- load plugins
@@ -31,9 +28,9 @@ function NvimTreeWidth()
   if winwidth <= 100 then
     return 30
   elseif winwidth <= 200 then
-    return 40
+    return 45
   else
-    return 50
+    return 55
   end
 end
 require("nvim-tree").setup {
@@ -41,14 +38,19 @@ require("nvim-tree").setup {
     -- Autres options de rendu...
   },
   view = {
-    width = NvimTreeWidth(), -- Définit la largeur de NvimTree à 25% de la largeur de l'écran
-    side = "left", -- Positionne NvimTree à gauche (tu peux aussi mettre "right")
+    width = NvimTreeWidth(),
+    side = "left",
     signcolumn = "no",
   },
   actions = {
     open_file = {
-      quit_on_open = true,
+      quit_on_open = false,
     },
+  },
+  update_focused_file = {
+    enable = true,
+    update_cwd = false,
+    ignore_list = {},
   },
 }
 
@@ -58,39 +60,47 @@ dofile(vim.g.base46_cache .. "statusline")
 
 require "options"
 require "nvchad.autocmds"
+require "autocmds"
 
 -- load mappings
 vim.schedule(function()
   require "mappings"
 end)
 
--- -- Autocmds
--- vim.api.nvim_create_autocmd("BufEnter", {
---   callback = function()
---     -- Ouvre tous les folds
---     vim.cmd "normal! zR"
---   end,
--- })
+require("nvim-treesitter.configs").setup {
+  highlight = {
+    enable = true,
+    -- Permet de surligner les balises personnalisées Angular
+    additional_vim_regex_highlighting = true,
+  },
+}
 
--- autocompletion par ia
--- require("cmp").setup {
---   sources = {
---     {
---       -- Include minuet as a source to enable autocompletion
---       { name = "minuet" },
---       -- and your other sources
---     },
---   },
---   performance = {
---     -- It is recommended to increase the timeout duration due to
---     -- the typically slower response speed of LLMs compared to
---     -- other completion sources. This is not needed when you only
---     -- need manual completion.
---     -- fetching_timeout = 2000,
---   },
---   mapping = {
---     ["<C-b>"] = require("minuet").make_cmp_map(),
---     -- and your other keymappings
---   },
--- }
---
+-- cmp
+local cmp = require "cmp"
+cmp.setup {
+  completion = {
+    autocomplete = { require("cmp.types").cmp.TriggerEvent.TextChanged },
+  },
+  mapping = cmp.mapping.preset.insert {
+    ["<leader>p"] = cmp.mapping.complete(),
+    ["<CR>"] = cmp.mapping.confirm { select = true },
+    ["<Tab>"] = cmp.mapping.select_next_item(),
+    ["<S-Tab>"] = cmp.mapping.select_prev_item(),
+  },
+  sources = cmp.config.sources {
+    { name = "nvim_lsp" },
+    { name = "buffer" },
+    { name = "path" },
+  },
+}
+
+-- surround
+require("mini.surround").setup()
+
+-- Ajout de couleurs a diffview
+vim.opt.fillchars:append { diff = " " }
+vim.api.nvim_set_hl(0, "DiffviewDiffAdd", { bg = "#003025" })
+vim.api.nvim_set_hl(0, "DiffviewDiffAddAsDelete", { bg = "#400000" })
+vim.api.nvim_set_hl(0, "DiffviewDiffDelete", { bg = "#400000" }) --, fg = "#200000" })
+vim.api.nvim_set_hl(0, "DiffviewDiffChange", { bg = "#002030" })
+vim.api.nvim_set_hl(0, "DiffviewDiffText", { bg = "#203959" })
