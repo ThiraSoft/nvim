@@ -84,7 +84,19 @@ cmp.setup {
   mapping = cmp.mapping.preset.insert {
     ["<leader>p"] = cmp.mapping.complete(),
     ["<CR>"] = cmp.mapping.confirm { select = true },
-    ["<Tab>"] = cmp.mapping.select_next_item(),
+    ["<Tab>"] = cmp.mapping(function(fallback)
+      local copilot_suggestion = require "copilot.suggestion"
+      if copilot_suggestion.is_visible() then
+        copilot_suggestion.accept()
+      else
+        -- Comportement normal de cmp avec Tab
+        if cmp.visible() then
+          cmp.select_next_item()
+        else
+          fallback()
+        end
+      end
+    end, { "i", "s" }),
     ["<S-Tab>"] = cmp.mapping.select_prev_item(),
   },
   sources = cmp.config.sources {

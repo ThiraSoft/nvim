@@ -1,4 +1,5 @@
 local plugin_files = {
+  "copilot",
   "diffview",
   "conform",
   "nvim-lspconfig",
