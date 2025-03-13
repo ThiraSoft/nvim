@@ -34,12 +34,12 @@ map("n", "<leader>ge", "<cmd>DiffviewToggleFiles<CR>", { desc = "Basculer fichie
 map("n", "<leader>gh", "<cmd>DiffviewFileHistory %<CR>", { desc = "Historique du fichier" })
 
 -- block jumps === === === ===
-map("n", "<leader>j", "}zz")
-map("n", "<leader>k", "{zz")
-map("n", "}", "}zz")
-map("n", "{", "{zz")
-map("n", ")", ")zz")
-map("n", "(", "(zz")
+map({ "n", "v" }, "<leader>j", "}zz")
+map({ "n", "v" }, "<leader>k", "{zz")
+map({ "n", "v" }, "}", "}zz")
+map({ "n", "v" }, "{", "{zz")
+map({ "n", "v" }, ")", ")zz")
+map({ "n", "v" }, "(", "(zz")
 
 --foldmode === === === ===
 map(
@@ -63,6 +63,12 @@ map(
   { silent = true, desc = "Jump to next error" }
 )
 
+-- nvim-tree === === === ===
+-- Toggle l'affichage des fichiers gitignore dans NvimTree
+vim.keymap.set("n", "<leader>ti", function()
+  require("nvim-tree.api").git.toggle_ignored()
+end, { desc = "Toggle gitignore files in NvimTree" })
+
 -- zen === === === ===
 local zen = require "zen-mode"
 local function toggleZen()
@@ -85,3 +91,100 @@ local function toggleZen()
   }
 end
 map("n", "<leader>zn", toggleZen, { desc = "Toogle zen mode" })
+
+-- hop === === === ===
+-- place this in one of your configuration file(s)
+local hop = require "hop"
+local directions = require("hop.hint").HintDirection
+vim.keymap.set("", "f", function()
+  hop.hint_char1 { direction = directions.AFTER_CURSOR, current_line_only = true }
+end, { remap = true })
+vim.keymap.set("", "F", function()
+  hop.hint_char1 { direction = directions.BEFORE_CURSOR, current_line_only = true }
+end, { remap = true })
+vim.keymap.set("", "t", function()
+  hop.hint_char1 { direction = directions.AFTER_CURSOR, current_line_only = true, hint_offset = -1 }
+end, { remap = true })
+vim.keymap.set("", "T", function()
+  hop.hint_char1 { direction = directions.BEFORE_CURSOR, current_line_only = true, hint_offset = 1 }
+end, { remap = true })
+map("n", "<leader>fj", "<cmd>HopWord<CR>", { desc = "Find Jump" })
+
+-- Focus sur la fenêtre de code avec Ctrl+Entrée
+local function focus_code_window()
+  -- Fonction pour vérifier si la fenêtre actuelle est une fenêtre de plugin
+  local function is_plugin_window()
+    local current_ft = vim.bo.filetype
+    local current_bufname = vim.fn.bufname()
+
+    -- Liste exhaustive des types de fenêtres non-code
+    local non_code_windows = {
+      "NvimTree",
+      "neo%-tree",
+      "Outline",
+      "avante",
+      "Trouble",
+      "qf",
+      "help",
+      "terminal",
+      "chat",
+      "prompt",
+      "input",
+    }
+
+    -- Vérification des types de fenêtres
+    for _, window_type in ipairs(non_code_windows) do
+      if
+        current_ft:match(window_type)
+        or current_bufname:match(window_type)
+        or current_bufname:lower():find(window_type)
+      then
+        return true
+      end
+    end
+
+    -- Vérifications spécifiques
+    if
+      current_bufname:find "Avante"
+      or current_ft == "avante_chat"
+      or current_bufname:lower():find "prompt"
+      or current_bufname:lower():find "input"
+    then
+      return true
+    end
+
+    -- Vérification du type de fenêtre
+    local win_type = vim.fn.win_gettype()
+    if win_type ~= "" and win_type ~= "normal" then
+      return true
+    end
+
+    return false
+  end
+
+  -- Sortir du mode terminal si nécessaire
+  if vim.fn.mode() == "t" then
+    vim.cmd "stopinsert"
+  end
+
+  -- Parcourt toutes les fenêtres pour trouver une fenêtre de code
+  local total_windows = vim.fn.winnr "$"
+  local initial_winnr = vim.fn.winnr()
+
+  for winnr = 1, total_windows do
+    vim.cmd(winnr .. "wincmd w")
+    if not is_plugin_window() then
+      return -- On a trouvé une fenêtre de code, on s'arrête
+    end
+  end
+
+  -- Si on n'a pas trouvé de fenêtre de code, on va à droite
+  vim.cmd "wincmd l"
+end
+
+map(
+  { "n", "v", "t" },
+  "<C-CR>",
+  focus_code_window,
+  { noremap = true, silent = true, desc = "Focus sur la fenêtre de code" }
+)

@@ -82,22 +82,25 @@ cmp.setup {
     autocomplete = { require("cmp.types").cmp.TriggerEvent.TextChanged },
   },
   mapping = cmp.mapping.preset.insert {
-    ["<leader>p"] = cmp.mapping.complete(),
+    -- ["<leader>p"] = cmp.mapping.complete(),
     ["<CR>"] = cmp.mapping.confirm { select = true },
     ["<Tab>"] = cmp.mapping(function(fallback)
       local copilot_suggestion = require "copilot.suggestion"
+      local avante = require "avante"
+
+      -- Vérifier d'abord si Copilot a une suggestion
       if copilot_suggestion.is_visible() then
+        print "Suggestion acceptée : Copilot"
         copilot_suggestion.accept()
+      -- Ensuite vérifier si Avante a une suggestion
+      elseif avante.has_suggestion and avante.has_suggestion() then
+        print "Suggestion acceptée : Claude/Avante"
+        avante.accept_suggestion()
+      -- Sinon, comportement par défaut
       else
-        -- Comportement normal de cmp avec Tab
-        if cmp.visible() then
-          cmp.select_next_item()
-        else
-          fallback()
-        end
+        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Tab>", true, true, true), "n", true)
       end
     end, { "i", "s" }),
-    ["<S-Tab>"] = cmp.mapping.select_prev_item(),
   },
   sources = cmp.config.sources {
     { name = "nvim_lsp" },

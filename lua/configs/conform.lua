@@ -15,6 +15,7 @@ local options = {
     jsonc = { "prettierd", "prettier" },
     yaml = { "prettierd", "prettier" },
     markdown = { "prettierd", "prettier" },
+    python = { "black", "prettierd", "prettier" },
   },
 
   format_on_save = {

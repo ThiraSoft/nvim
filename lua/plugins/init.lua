@@ -5,6 +5,7 @@ local plugin_files = {
   "nvim-lspconfig",
   "zen-mode",
   "mini-surround",
+  "hop",
   -- "minuet",
 }
 
