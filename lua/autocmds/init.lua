@@ -59,6 +59,7 @@ local function open_nvim_tree_and_refocus()
       vim.opt.relativenumber = true
       if vim.bo[buf].buftype == "" then
         vim.api.nvim_set_current_buf(buf)
+        vim.cmd "normal! m-" -- Evite d'ajouter un jump dans la jumplist pour nvimtree
         return
       end
     end
@@ -70,6 +71,7 @@ vim.api.nvim_create_autocmd("VimEnter", {
     if vim.fn.argc() == 0 then
       vim.schedule(open_nvim_tree_and_refocus)
     end
+    vim.cmd "clearjumps" -- Efface la jumplist à chaque ouverture de session
   end,
 })
 
@@ -78,7 +80,6 @@ vim.api.nvim_create_autocmd("FileType", {
   callback = function()
     vim.defer_fn(function()
       vim.wo.relativenumber = true -- Active les numéros relatifs
-      -- vim.wo.number = true -- Active les numéros absolus
     end, 100) -- Attend 100ms pour s'assurer que la fenêtre est prête
   end,
 })

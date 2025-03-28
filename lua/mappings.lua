@@ -3,7 +3,7 @@ local map = vim.keymap.set
 
 -- main
 map("n", ";", ":", { desc = "CMD enter command mode" })
-map("i", "jk", "<ESC>")
+map("i", "jk", "<ESC>", { desc = "ESC" })
 
 -- splits
 map("n", "<leader>v", ":vsplit<CR>", { noremap = true, silent = true, desc = "Split vertical" })
@@ -24,7 +24,6 @@ map(
 )
 
 -- navigation === === === ===
-map("n", "fn", "<cmd>echo expand('%:p')<CR>")
 map("n", "<leader>l", ":tabnext<CR>", { desc = "Onglet suivant" })
 
 -- git
@@ -33,7 +32,7 @@ map("n", "<leader>gq", "<cmd>DiffviewClose<CR>", { desc = "Fermer Diffview" })
 map("n", "<leader>ge", "<cmd>DiffviewToggleFiles<CR>", { desc = "Basculer fichiers" })
 map("n", "<leader>gh", "<cmd>DiffviewFileHistory %<CR>", { desc = "Historique du fichier" })
 
--- block jumps === === === ===
+-- jumps === === === ===
 map({ "n", "v" }, "<leader>j", "}zz")
 map({ "n", "v" }, "<leader>k", "{zz")
 map({ "n", "v" }, "}", "}zz")
@@ -41,7 +40,11 @@ map({ "n", "v" }, "{", "{zz")
 map({ "n", "v" }, ")", ")zz")
 map({ "n", "v" }, "(", "(zz")
 
---foldmode === === === ===
+-- Historique des sauts
+map("n", "<C-p>", ":jumps<CR>")
+map("n", "<C-i>", "<C-i>", { desc = "Aller au jump suivant" }) -- obligé de faire ça pour éviter le conflit avec tab
+
+-- folds === === === ===
 map(
   "n",
   "<leader>zi",
@@ -59,7 +62,7 @@ map(
 map(
   "n",
   "<leader>dn",
-  "<cmd>lua vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR })<CR>",
+  "<cmd>lua vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.WARNING })<CR>",
   { silent = true, desc = "Jump to next error" }
 )
 
@@ -93,7 +96,6 @@ end
 map("n", "<leader>zn", toggleZen, { desc = "Toogle zen mode" })
 
 -- hop === === === ===
--- place this in one of your configuration file(s)
 local hop = require "hop"
 local directions = require("hop.hint").HintDirection
 vim.keymap.set("", "f", function()
@@ -108,7 +110,8 @@ end, { remap = true })
 vim.keymap.set("", "T", function()
   hop.hint_char1 { direction = directions.BEFORE_CURSOR, current_line_only = true, hint_offset = 1 }
 end, { remap = true })
-map("n", "<leader>fj", "<cmd>HopWord<CR>", { desc = "Find Jump" })
+map("n", "<leader>fj", "m`<cmd>HopWord<CR>", { desc = "Find Jump" })
+map("n", "fj", "m`<cmd>HopWord<CR>", { nowait = true, desc = "Find Jump" })
 
 -- Focus sur la fenêtre de code avec Ctrl+Entrée
 local function focus_code_window()
@@ -169,7 +172,6 @@ local function focus_code_window()
 
   -- Parcourt toutes les fenêtres pour trouver une fenêtre de code
   local total_windows = vim.fn.winnr "$"
-  local initial_winnr = vim.fn.winnr()
 
   for winnr = 1, total_windows do
     vim.cmd(winnr .. "wincmd w")
@@ -188,3 +190,11 @@ map(
   focus_code_window,
   { noremap = true, silent = true, desc = "Focus sur la fenêtre de code" }
 )
+
+-- clipboard === === === ===
+local function copy_file_path()
+  local path = vim.fn.expand "%:p" -- Chemin complet
+  vim.fn.setreg("+", path) -- Copie dans le presse-papiers
+  print("Chemin copié : " .. path)
+end
+map("n", "<leader>yp", copy_file_path, { desc = "Copier le chemin complet du fichier" })

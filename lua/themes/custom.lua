@@ -1,6 +1,3 @@
--- credit to original theme for existing : https://github.com/kdheepak/monochrome.nvim
--- NOTE: This is a modified version of it
-
 local M = {}
 
 local palette = {
