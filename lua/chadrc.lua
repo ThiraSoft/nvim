@@ -1,7 +1,3 @@
--- This file needs to have same structure as nvconfig.lua
--- https://github.com/NvChad/ui/blob/v3.0/lua/nvconfig.lua
--- Please read that file to know all available options :(
-
 ---@type ChadrcConfig
 local M = {}
 
@@ -9,11 +5,6 @@ M.base46 = {
 	theme = "custom",
 	theme_toggle = { "custom", "github_light" },
 	transparency = false,
-
-	-- hl_override = {
-	-- 	Comment = { italic = true },
-	-- 	["@comment"] = { italic = true },
-	-- },
 }
 
 vim.cmd("highlight St_relativepath guifg=#626a83 guibg=#2a2b36")
@@ -23,7 +14,6 @@ local stbufnr = function()
 end
 
 M.ui = {
-
 	telescope = { style = "borderless" }, -- borderless / bordered
 	statusline = {
 		theme = "default",
@@ -43,57 +33,15 @@ M.ui = {
 	},
 }
 
+local logo = require("logos").get_random()
+
 M.nvdash = {
 	load_on_startup = true,
-	-- header = {
-	-- 	"                           ",
-	-- 	"                           ",
-	-- 	"                           ",
-	-- 	"           eovim          ",
-	-- 	"                           ",
-	-- 	"                           ",
-	-- 	"                           ",
-	-- },
-
-	header = {
-
-		"                                                                   ",
-		"                                                                   ",
-		"                                                                   ",
-		"    .                                                         .    ",
-		"     .                                                       .     ",
-		"      .                                                     .      ",
-		"       ...                                               ...       ",
-		"         ....                                         ....         ",
-		"     .     . ...                                   ... .     .     ",
-		"      ..        ..                               ..        ..      ",
-		"      .....        ..                         ..        .....      ",
-		"       ........      ..                      .      ........       ",
-		"         ..........    .                   .    ..........         ",
-		"             .........   .               .   .........             ",
-		"        ................. .             . .................        ",
-		"            ...............             ...............            ",
-		"              ..............           ..............              ",
-		"             .   ...  ...  o   eovim  o  ...  ...   .             ",
-		"                 .  .      .           .      .  .                 ",
-		"                   .    ...             ...    .                   ",
-		"                      ....               ....                      ",
-		"                    .....                 .....                    ",
-		"                  ......                   ......                  ",
-		"                 ......                     ......                 ",
-		"                .......                     .......                ",
-		"                ..... .                     . .....                ",
-		"               . ....  .                      .... .               ",
-		"               ..  ..                         ..  ..               ",
-		"                    .                         .                    ",
-		"              .                                     .              ",
-		"              .                                     .              ",
-		"                                                                   ",
-	},
+	header = logo,
 
 	buttons = {
-		{ txt = "", cmd = "Telescope oldfiles" },
 		-- { txt = "  Recent Files", cmd = "Telescope oldfiles" },
+		{ txt = "  New File", cmd = "enew" },
 		-- { txt = "  Find File", keys = "ff", cmd = "Telescope find_files" },
 		-- { txt = "󰈭  Find Word", keys = "fw", cmd = "Telescope live_grep" },
 
