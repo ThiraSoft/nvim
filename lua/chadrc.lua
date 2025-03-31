@@ -40,10 +40,10 @@ M.nvdash = {
 	header = logo,
 
 	buttons = {
-		-- { txt = "  Recent Files", cmd = "Telescope oldfiles" },
+		{ txt = "  Recent Files", cmd = "Telescope oldfiles" },
 		{ txt = "  New File", cmd = "enew" },
-		-- { txt = "  Find File", keys = "ff", cmd = "Telescope find_files" },
-		-- { txt = "󰈭  Find Word", keys = "fw", cmd = "Telescope live_grep" },
+		-- { txt = "  Find File", cmd = "Telescope find_files" },
+		-- { txt = "󰈭  Find Word", cmd = "Telescope live_grep" },
 
 		-- { txt = "─", hl = "NvDashFooter", no_gap = false, rep = true },
 		--
