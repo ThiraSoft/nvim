@@ -93,3 +93,4 @@ vim.api.nvim_create_autocmd("VimEnter", {
     end, 100) -- Délai de 100ms
   end,
 })
+

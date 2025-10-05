@@ -110,7 +110,7 @@ cmp.setup {
 }
 
 -- surround
-require("mini.surround").setup()
+-- require("mini.surround").setup()
 
 -- Ajout de couleurs a diffview
 vim.opt.fillchars:append { diff = "/" }
@@ -124,3 +124,20 @@ vim.api.nvim_set_hl(0, "DiffviewDiffChange", { bg = "#002030" })
 vim.api.nvim_set_hl(0, "DiffChange", { bg = "#002030" })
 vim.api.nvim_set_hl(0, "DiffviewDiffText", { bg = "#203959" })
 vim.api.nvim_set_hl(0, "DiffText", { bg = "#203959" })
+
+-- couleur pour la minimap
+vim.api.nvim_set_hl(0, "CodewindowBoundsBackground", { bg = "#201520" })
+
+if vim.g.neovide then
+  -- vim.g.neovide_cursor_vfx_mode = "sonicboom"
+  vim.g.neovide_cursor_vfx_mode = "ripple"
+  vim.g.neovide_cursor_vfx_opacity = 30.0
+  vim.g.neovide_text_gamma = 0.4
+  vim.g.neovide_text_contrast = 0.4
+  vim.g.neovide_input_use_logo = 1
+  vim.keymap.set("n", "<D-v>", '"+p<CR>', { noremap = true, silent = true })
+  vim.keymap.set({ "i", "c" }, "<D-v>", "<C-R>+", { noremap = true, silent = true })
+  vim.keymap.set("t", "<D-v>", "<C-R>+", { noremap = true, silent = true })
+  vim.keymap.set("v", "<D-c>", '"+y<CR>', { noremap = true, silent = true })
+  vim.opt.linespace = 5
+end

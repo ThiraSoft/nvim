@@ -1,0 +1,81 @@
+-- local M = {}
+--
+-- -- Convertir 8 bits en caractère braille
+-- local function braille_char(bits)
+--   local base = 0x2800
+--   local map = { 1, 2, 4, 8, 16, 32, 64, 128 }
+--   local code = base
+--   for i, b in ipairs(bits) do
+--     if b == 1 then
+--       code = code + map[i]
+--     end
+--   end
+--   return vim.fn.nr2char(code)
+-- end
+--
+-- -- Créer ou mettre à jour la minimap
+-- function M.open_minimap()
+--   local width = 20 -- largeur de la minimap en colonnes
+--   local buf = vim.api.nvim_create_buf(false, true)
+--   local opts = {
+--     relative = "editor",
+--     width = width,
+--     height = math.floor(vim.o.lines / 4), -- 1 ligne Braille = 4 lignes de code
+--     row = 1,
+--     col = vim.o.columns - width - 1,
+--     style = "minimal",
+--     border = "single",
+--   }
+--   local win = vim.api.nvim_open_win(buf, false, opts)
+--
+--   local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+--   local reduced = {}
+--
+--   -- chaque ligne Braille = 4 lignes de code
+--   for i = 1, #lines, 4 do
+--     local row = {}
+--     for col = 1, width * 2, 2 do -- 2 colonnes de code = 1 colonne Braille
+--       local bits = {}
+--       for y = 0, 3 do
+--         local l = lines[i + y] or ""
+--         for x = 0, 1 do
+--           local c = l:sub(col + x, col + x)
+--           table.insert(bits, (c ~= "" and c ~= " ") and 1 or 0)
+--         end
+--       end
+--       table.insert(row, braille_char(bits))
+--     end
+--     table.insert(reduced, table.concat(row))
+--   end
+--
+--   vim.api.nvim_buf_set_lines(buf, 0, -1, false, reduced)
+--   vim.bo[buf].modifiable = false
+--   vim.bo[buf].buftype = "nofile"
+--
+--   -- Highlight de la ligne courante
+--   vim.cmd "highlight MinimapCursorLine guifg=#ffffff guibg=#ff0000"
+--   M.update_highlight(buf)
+--
+--   -- suivre le curseur
+--   vim.cmd(string.format(
+--     [[
+--     augroup MinimapHighlight
+--       autocmd!
+--       autocmd CursorMoved,CursorMovedI <buffer> lua require'minimap'.update_highlight(%d)
+--     augroup END
+--   ]],
+--     buf
+--   ))
+-- end
+--
+-- -- Mettre à jour la surbrillance de la ligne courante
+-- function M.update_highlight(buf)
+--   vim.api.nvim_buf_clear_namespace(buf, -1, 0, -1)
+--   local current_line = vim.fn.line "."
+--   local braille_line = math.floor((current_line - 1) / 4)
+--   vim.api.nvim_buf_add_highlight(buf, -1, "MinimapCursorLine", braille_line, 0, -1)
+-- end
+--
+-- vim.api.nvim_create_user_command("Minimap", M.open_minimap, {})
+--
+-- return M

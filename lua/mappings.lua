@@ -67,10 +67,9 @@ map(
 )
 
 -- nvim-tree === === === ===
--- Toggle l'affichage des fichiers gitignore dans NvimTree
-vim.keymap.set("n", "<leader>ti", function()
-  require("nvim-tree.api").git.toggle_ignored()
-end, { desc = "Toggle gitignore files in NvimTree" })
+map("n", "+", function()
+  require("nvim-tree.api").tree.change_root_to_node()
+end, { desc = "Change root to node" })
 
 -- zen === === === ===
 local zen = require "zen-mode"
@@ -220,3 +219,14 @@ end, {
   -- Tu peux ajouter des options ici si tu veux, comme { nargs = 0 }
 })
 vim.keymap.set("n", "<leader>df", ":DiffToggle<CR>", { desc = "Toggle diff mode" })
+
+-- ANGULAR === === === ===
+vim.api.nvim_create_user_command("OrganizeImports", function()
+  local params = {
+    command = "_typescript.organizeImports",
+    arguments = { vim.api.nvim_buf_get_name(0) },
+    title = "",
+  }
+  vim.lsp.buf.execute_command(params)
+end, { desc = "Nettoyer et organiser les imports TypeScript/Angular" })
+map("n", "<leader>oi", ":OrganizeImports<CR>", { desc = "Organize Imports" })
