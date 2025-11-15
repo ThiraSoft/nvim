@@ -20,19 +20,6 @@ vim.api.nvim_create_autocmd("BufEnter", {
 -- Crée un groupe d'autocommandes pour une gestion propre
 local group = vim.api.nvim_create_augroup("AutoSaveOnFocusLost", { clear = true })
 
--- Ajoute une autocommande qui s'exécute lors de la perte de focus
--- vim.api.nvim_create_autocmd("FocusLost", {
---   group = group,
---   pattern = "*",
---   command = "silent! wa",
--- })
--- Ajoute une autocommande qui s'exécute lors de la perte de focus
--- vim.api.nvim_create_autocmd("BufLeave", {
---   group = group,
---   pattern = "*",
---   command = "silent! w",
--- })
-
 -- Auto save (uniquement si hors node_modules)
 vim.api.nvim_create_autocmd("BufLeave", {
   group = group,
@@ -50,16 +37,6 @@ vim.api.nvim_create_autocmd("VimEnter", {
   callback = function()
     -- Efface la jumplist à chaque ouverture de session
     vim.cmd "clearjumps"
-  end,
-})
-
--- Numeros de lignes dans nvimtree
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "NvimTree",
-  callback = function()
-    vim.defer_fn(function()
-      vim.wo.relativenumber = true -- Active les numéros relatifs
-    end, 100) -- Attend 100ms pour s'assurer que la fenêtre est prête
   end,
 })
 
@@ -94,3 +71,42 @@ vim.api.nvim_create_autocmd("VimEnter", {
   end,
 })
 
+-- Auto-enable LSP
+vim.api.nvim_create_autocmd({ "FileType", "BufEnter" }, {
+  pattern = { "*.go", "go" },
+  callback = function()
+    vim.lsp.enable "gopls"
+  end,
+})
+
+-- Auto-enable Python
+vim.api.nvim_create_autocmd({ "FileType", "BufEnter" }, {
+  pattern = { "*.py", "python" },
+  callback = function()
+    if vim.bo.filetype == "python" then
+      vim.lsp.enable "pyright"
+    end
+  end,
+})
+
+vim.api.nvim_create_autocmd({ "FileType", "BufEnter", "BufReadPost", "BufNewFile" }, {
+  pattern = { "typescript", "html", "typescriptreact" },
+  callback = function()
+    if vim.fs.root(0, { "angular.json" }) then
+      vim.lsp.enable "angularls"
+    end
+  end,
+})
+
+-- Inlay hints
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(args)
+    vim.lsp.inlay_hint.enable(true, { bufnr = args.buf })
+
+    -- Keymaps
+    local opts = { buffer = args.buf }
+    vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+    vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+    vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
+  end,
+})

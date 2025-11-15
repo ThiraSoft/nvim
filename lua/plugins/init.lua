@@ -1,16 +1,10 @@
 local plugin_files = {
-  "avante",
   "copilot",
-  "vim-godot",
   "diffview",
   "conform",
-  "nvim-lspconfig",
-  "zen-mode",
   "mini-surround",
   "hop",
-  "nvim-rest",
-  "codewindow",
-  -- "minuet",
+  "lsp",
 }
 
 local plugins = {}

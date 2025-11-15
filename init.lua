@@ -18,33 +18,22 @@ require("lazy").setup({
     branch = "v2.5",
     import = "nvchad.plugins",
   },
-
   { import = "plugins" },
 }, lazy_config)
 
--- Configuration pour NvimTree
-function NvimTreeWidth()
-  local winwidth = vim.go.columns
-  if winwidth <= 100 then
-    return 30
-  elseif winwidth <= 200 then
-    return 45
-  else
-    return 55
-  end
-end
+-- nvim-tree setup
 require("nvim-tree").setup {
   renderer = {
+    -- highlight_git = true,
     -- Autres options de rendu...
   },
   view = {
-    width = NvimTreeWidth(),
     side = "left",
     signcolumn = "no",
   },
   actions = {
     open_file = {
-      quit_on_open = false,
+      quit_on_open = true,
     },
   },
   update_focused_file = {
@@ -58,13 +47,13 @@ require("nvim-tree").setup {
 dofile(vim.g.base46_cache .. "defaults")
 dofile(vim.g.base46_cache .. "statusline")
 
-require "options"
 require "nvchad.autocmds"
-require "autocmds"
+require "options"
+require "mappings"
 
--- load mappings
+-- background loading
 vim.schedule(function()
-  require "mappings"
+  require "autocmds"
 end)
 
 require("nvim-treesitter.configs").setup {
@@ -86,16 +75,12 @@ cmp.setup {
     ["<CR>"] = cmp.mapping.confirm { select = true },
     ["<Tab>"] = cmp.mapping(function(fallback)
       local copilot_suggestion = require "copilot.suggestion"
-      local avante = require "avante"
 
       -- Vérifier d'abord si Copilot a une suggestion
       if copilot_suggestion.is_visible() then
         print "Suggestion acceptée : Copilot"
         copilot_suggestion.accept()
-      -- Ensuite vérifier si Avante a une suggestion
-      elseif avante.has_suggestion and avante.has_suggestion() then
-        print "Suggestion acceptée : Claude/Avante"
-        avante.accept_suggestion()
+
       -- Sinon, comportement par défaut
       else
         vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Tab>", true, true, true), "n", true)
@@ -110,7 +95,7 @@ cmp.setup {
 }
 
 -- surround
--- require("mini.surround").setup()
+require("mini.surround").setup()
 
 -- Ajout de couleurs a diffview
 vim.opt.fillchars:append { diff = "/" }
@@ -124,9 +109,6 @@ vim.api.nvim_set_hl(0, "DiffviewDiffChange", { bg = "#002030" })
 vim.api.nvim_set_hl(0, "DiffChange", { bg = "#002030" })
 vim.api.nvim_set_hl(0, "DiffviewDiffText", { bg = "#203959" })
 vim.api.nvim_set_hl(0, "DiffText", { bg = "#203959" })
-
--- couleur pour la minimap
-vim.api.nvim_set_hl(0, "CodewindowBoundsBackground", { bg = "#201520" })
 
 if vim.g.neovide then
   -- vim.g.neovide_cursor_vfx_mode = "sonicboom"

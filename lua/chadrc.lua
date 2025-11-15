@@ -33,15 +33,16 @@ M.ui = {
   },
 }
 
-local logo = require("logos").get_random()
+-- local logo = require("logos").get_random()
 
 M.nvdash = {
-  load_on_startup = true,
-  header = logo,
+  load_on_startup = false,
+  -- header = logo,
 
   buttons = {
     { txt = "  Recent Files", cmd = "Telescope oldfiles" },
     { txt = "  New File", cmd = "enew" },
+
     -- { txt = "  Find File", cmd = "Telescope find_files" },
     -- { txt = "󰈭  Find Word", cmd = "Telescope live_grep" },
 

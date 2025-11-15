@@ -32,14 +32,6 @@ map("n", "<leader>gq", "<cmd>DiffviewClose<CR>", { desc = "Fermer Diffview" })
 map("n", "<leader>ge", "<cmd>DiffviewToggleFiles<CR>", { desc = "Basculer fichiers" })
 map("n", "<leader>gh", "<cmd>DiffviewFileHistory %<CR>", { desc = "Historique du fichier" })
 
--- jumps === === === ===
-map({ "n", "v" }, "<leader>j", "}zz")
-map({ "n", "v" }, "<leader>k", "{zz")
-map({ "n", "v" }, "}", "}zz")
-map({ "n", "v" }, "{", "{zz")
-map({ "n", "v" }, ")", ")zz")
-map({ "n", "v" }, "(", "(zz")
-
 -- Historique des sauts
 map("n", "<C-i>", "<C-i>", { noremap = true, desc = "Aller au jump suivant" }) -- obligé de faire ça pour éviter le conflit avec tab
 map("n", "<C-p>", "<C-i>", { noremap = true, desc = "Aller au jump suivant" }) -- obligé de faire ça pour éviter le conflit avec tab
@@ -50,12 +42,6 @@ map(
   "<leader>zi",
   ":set foldmethod=indent<CR>",
   { noremap = true, silent = true, desc = "Set fold method to indent" }
-)
-map(
-  "n",
-  "<leader>ze",
-  ":set foldmethod=manual<CR>|zE",
-  { noremap = true, silent = true, desc = "Set fold method to manual" }
 )
 
 -- lsp === === === ===
@@ -70,29 +56,6 @@ map(
 map("n", "+", function()
   require("nvim-tree.api").tree.change_root_to_node()
 end, { desc = "Change root to node" })
-
--- zen === === === ===
-local zen = require "zen-mode"
-local function toggleZen()
-  zen.toggle {
-    window = {
-      width = 0.5, -- width will be 85% of the editor width
-    },
-    on_open = function()
-      -- Fermer NvimTree si ouvert
-      if vim.fn.exists "g:loaded_nvim_tree" == 1 then
-        vim.cmd "NvimTreeClose"
-      end
-    end,
-    on_close = function()
-      -- Rouvrir NvimTree à la fermeture de ZenMode
-      if vim.fn.exists "g:loaded_nvim_tree" == 1 then
-        vim.cmd "NvimTreeOpen"
-      end
-    end,
-  }
-end
-map("n", "<leader>zn", toggleZen, { desc = "Toogle zen mode" })
 
 -- hop === === === ===
 local hop = require "hop"
