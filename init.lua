@@ -50,11 +50,7 @@ dofile(vim.g.base46_cache .. "statusline")
 require "nvchad.autocmds"
 require "options"
 require "mappings"
-
--- background loading
-vim.schedule(function()
-  require "autocmds"
-end)
+require "autocmds"
 
 require("nvim-treesitter.configs").setup {
   highlight = {

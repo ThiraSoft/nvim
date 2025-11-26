@@ -51,6 +51,7 @@ map(
   "<cmd>lua vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.WARNING })<CR>",
   { silent = true, desc = "Jump to next error" }
 )
+map("n", "<leader>ra", "<cmd>lua vim.lsp.buf.rename()<CR>", { desc = "LSP Rename" })
 
 -- nvim-tree === === === ===
 map("n", "+", function()

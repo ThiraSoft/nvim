@@ -2,6 +2,17 @@
 local normal_hl = vim.api.nvim_get_hl(0, { name = "Normal", link = false })
 Base_bg_color = normal_hl and normal_hl.bg or nil
 
+-- Configuration spécifique pour les fichiers Go (tabs de 8 espaces)
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "go",
+  callback = function()
+    vim.opt_local.expandtab = false -- tabs, pas d'espaces
+    vim.opt_local.shiftwidth = 8 -- affichage d'un tab = 8 colonnes
+    vim.opt_local.tabstop = 8
+    vim.opt_local.softtabstop = 8
+  end,
+})
+
 vim.api.nvim_create_autocmd("BufEnter", {
   callback = function()
     local filepath = vim.fn.expand "%:p" -- Récupère le chemin complet du fichier

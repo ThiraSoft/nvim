@@ -14,7 +14,7 @@ local stbufnr = function()
 end
 
 M.ui = {
-  telescope = { style = "borderless" }, -- borderless / bordered
+  telescope = { style = "bordered" }, -- borderless / bordered
   statusline = {
     theme = "default",
     order = { "mode", "relativepath", "file", "git", "%=", "lsp_msg", "%=", "diagnostics", "lsp", "cwd" },
