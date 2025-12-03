@@ -2,7 +2,6 @@ require "nvchad.mappings"
 local map = vim.keymap.set
 
 -- main
-map("n", ";", ":", { desc = "CMD enter command mode" })
 map("i", "jk", "<ESC>", { desc = "ESC" })
 
 -- splits
@@ -60,21 +59,7 @@ end, { desc = "Change root to node" })
 
 -- hop === === === ===
 local hop = require "hop"
-local directions = require("hop.hint").HintDirection
-vim.keymap.set("", "f", function()
-  hop.hint_char1 { direction = directions.AFTER_CURSOR, current_line_only = true }
-end, { remap = true })
-vim.keymap.set("", "F", function()
-  hop.hint_char1 { direction = directions.BEFORE_CURSOR, current_line_only = true }
-end, { remap = true })
-vim.keymap.set("", "t", function()
-  hop.hint_char1 { direction = directions.AFTER_CURSOR, current_line_only = true, hint_offset = -1 }
-end, { remap = true })
-vim.keymap.set("", "T", function()
-  hop.hint_char1 { direction = directions.BEFORE_CURSOR, current_line_only = true, hint_offset = 1 }
-end, { remap = true })
 map("n", "<leader>fj", "m`<cmd>HopWord<CR>", { desc = "Find Jump" })
-map("n", "fj", "m`<cmd>HopWord<CR>", { nowait = true, desc = "Find Jump" })
 
 -- Focus sur la fenêtre de code avec Ctrl+Entrée
 local function focus_code_window()
