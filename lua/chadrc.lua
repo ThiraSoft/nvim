@@ -1,10 +1,14 @@
----@type ChadrcConfig
+---@class ChadrcConfig
 local M = {}
 
 M.base46 = {
   theme = "custom",
   theme_toggle = { "custom", "custom" },
   transparency = false,
+
+  hl_override = {
+    Visual = { bg = "#0c3030" },
+  },
 }
 
 vim.cmd "highlight St_relativepath guifg=#626a83 guibg=#2a2b36"

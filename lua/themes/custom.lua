@@ -22,7 +22,6 @@ end
 -- palete de couleurs
 local noir1 = rgb(12, 12, 12)
 local noir2 = rgb(18, 18, 18)
-local noir3 = rgb(27, 27, 27)
 
 local dark_gris1 = rgb(48, 48, 68)
 local dark_gris2 = rgb(68, 68, 88)
@@ -36,23 +35,26 @@ local light_gris1 = rgb(200, 200, 220)
 local light_gris2 = rgb(220, 220, 240)
 local light_gris3 = rgb(235, 235, 255)
 
-local rouille = "#E06060"
+local primary = "#E06060"
+local secondary = "#00B0A0"
+local secondary2 = "#101c20"
+
 local rouille2 = "#E09090"
 local moutarde1 = "#C09040"
 local moutarde2 = "#E0A060"
 local moutarde3 = "#F0C0A0"
-local viridien = "#00B0A0"
 local bleu = "#5080B0"
 local violet = "#9040B0"
 
 local calls = light_gris2
+local selection = secondary2
 
 -- UI
 M.base_30 = {
   white = light_gris3, -- file name in active tabs
   darker_black = noir2, -- background nvim tree et fenetres flottantes
-  black = noir3, -- background en haut des tabs et selection dans nvim tree
-  black2 = noir3, -- cursor line
+  black = selection, -- background en haut des tabs et selection dans nvim tree
+  black2 = selection, -- cursor line
   one_bg = "#242424",
   one_bg2 = "#2e2e2e",
   one_bg3 = "#303040", -- theme switch
@@ -96,7 +98,7 @@ M.base_16 = {
   base0B = palette.light_grey, -- strings
   base0C = palette.light_grey, -- () lua
   base0D = "#7d92a2",
-  base0E = rouille, -- keywords 'async, await, func, if, return'
+  base0E = primary, -- keywords 'async, await, func, if, return'
   base0F = palette.light_grey, -- () {}
 }
 
@@ -107,18 +109,18 @@ M.polish_hl = {
   },
 
   treesitter = {
-    ["@keyword.repeat"] = { fg = rouille },
+    ["@keyword.repeat"] = { fg = primary },
     ["@operator"] = { fg = dark_gris3 },
-    ["@keyword"] = { fg = rouille },
-    ["@type"] = { fg = viridien },
-    ["@type.builtin"] = { fg = viridien },
-    ["@module.go"] = { fg = viridien },
-    ["Include"] = { fg = rouille },
+    ["@keyword"] = { fg = primary },
+    ["@type"] = { fg = secondary },
+    ["@type.builtin"] = { fg = secondary },
+    ["@module.go"] = { fg = secondary },
+    ["Include"] = { fg = primary },
     ["@field"] = { fg = light_gris1 },
 
-    ["@Constructor"] = { fg = viridien },
+    ["@Constructor"] = { fg = secondary },
     ["@Constructor.lua"] = { fg = gris1 },
-    ["@Constructor.pyhon"] = { fg = viridien },
+    ["@Constructor.pyhon"] = { fg = secondary },
     ["@function"] = { fg = calls },
     ["@function.go"] = { fg = calls },
     ["@function.method"] = { fg = calls },
@@ -142,8 +144,8 @@ M.polish_hl = {
     ["@variable.go"] = { fg = gris3 },
     ["@property"] = { fg = gris2 },
     ["@property.go"] = { fg = gris2 },
-    ["@number"] = { fg = viridien },
-    ["@number.float"] = { fg = viridien },
+    ["@number"] = { fg = secondary },
+    ["@number.float"] = { fg = secondary },
 
     -- ["@variable"] = { fg = M.base_16.base06 },
     --   ["@attribute"] = { fg = M.base_30.cyan },

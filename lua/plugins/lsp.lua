@@ -30,7 +30,7 @@ return {
             -- compositeLiteralTypes = true,
             -- constantValues = true,
             -- functionTypeParameters = true,
-            parameterNames = true,
+            -- parameterNames = true,
             -- rangeVariableTypes = true,
           },
         },
