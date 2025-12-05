@@ -151,17 +151,6 @@ map("n", "<leader>yp", copy_file_path, { desc = "Copier le chemin complet du fic
 -- go === === === ===
 map("n", "<leader>go", "<cmd>w ! go run .<CR>", { desc = "Go run ." })
 
--- terminal === === === ===
--- Ouvrir un terminal flottant
-map("n", "<leader>tm", function()
-  require("nvchad.term").toggle { pos = "float", id = "floatTerm" }
-end, { desc = "Terminal flottant" })
--- Echap ferme le terminal sans le tuer
-vim.keymap.set("t", "<Esc>", function()
-  local keys = vim.api.nvim_replace_termcodes("<C-\\><C-n>:hide<CR>", true, false, true)
-  vim.api.nvim_feedkeys(keys, "n", false)
-end, { desc = "Cache le terminal sans le tuer" })
-
 -- Diffs
 vim.api.nvim_create_user_command("DiffToggle", function()
   if vim.opt.diff:get() then

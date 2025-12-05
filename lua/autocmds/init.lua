@@ -43,51 +43,36 @@ vim.api.nvim_create_autocmd("BufLeave", {
   end,
 })
 
--- log pour chronos on save
+-- Log pour chronos on save (Version Asynchrone Optimisée)
 vim.api.nvim_create_autocmd("BufWritePost", {
   pattern = "*",
   callback = function()
     local file_path = vim.fn.expand "%:p"
     local arg = "NVIM_SAVE:" .. file_path
 
-    -- -- Définition de la fonction Zsh directement dans la commande
-    local zsh_script = [[
-		timelog() {
-			# mouchard
-			local log_dir="$HOME/zsh_logs"
-			if \[\[ ! -d "$log_dir" \]\]; then
-				mkdir -p "$log_dir"
-			fi
-
-			local today=$(date "+%Y-%m-%d")
-			local log_file="$log_dir/$today.log"
-
-			local timestamp=$(date "+%Y-%m-%d %H:%M:%S")
-			local command_str="$1"
-
-			# Récupère la racine git ou le dossier courant
-			local git_root=$(git rev-parse --show-toplevel 2>/dev/null)
-			local project_dir=""
-
-			if \[\[ -n "$git_root" \]\]; then
-				project_dir="$git_root"
-			else
-				project_dir=$(pwd)
-			fi
-
-			# Récupère la branche courante ou "void"
-			local git_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "void")
-
-			echo "[$timestamp] [$project_dir] [$git_branch] $command_str" >> "$log_file"
-		} 
-		# Execute la fonction
-		timelog ]] .. vim.fn.shellescape(arg) .. [[
-    ]]
-
-    -- Exécute la définition et l'appel dans un nouveau shell zsh
-    vim.fn.system("zsh -c " .. vim.fn.shellescape(zsh_script))
+    local cmd = string.format(
+      [[
+      log_dir="$HOME/zsh_logs"
+      mkdir -p "$log_dir"
+      timestamp=$(date "+%%Y-%%m-%%d %%H:%%M:%%S")
+      today=$(date "+%%Y-%%m-%%d")
+      
+      git_root=$(git rev-parse --show-toplevel 2>/dev/null)
+      if [ -n "$git_root" ]; then
+        project_dir="$git_root"
+        git_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "void")
+      else
+        project_dir=$(pwd)
+        git_branch="void"
+      fi
+      
+      echo "[$timestamp] [$project_dir] [$git_branch] %s" >> "$log_dir/$today.log"
+    ]],
+      arg
+    )
+    vim.system({ "zsh", "-c", cmd }, { text = true })
   end,
-  desc = "Appelle une fonction Zsh auto-définie après l'enregistrement du fichier.",
+  desc = "Log save async",
 })
 
 -- Hook d'ouverture de neovim

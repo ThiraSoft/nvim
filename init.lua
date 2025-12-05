@@ -90,6 +90,9 @@ cmp.setup {
   },
 }
 
+-- Toggleterm
+require("toggleterm").setup()
+
 -- surround
 require("mini.surround").setup()
 

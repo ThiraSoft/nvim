@@ -5,6 +5,7 @@ local plugin_files = {
   "mini-surround",
   "hop",
   "lsp",
+  "toggleterm",
 }
 
 local plugins = {}
